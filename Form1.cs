@@ -16,37 +16,29 @@ namespace bl2
         {
             InitializeComponent();
             переносПоСловамToolStripMenuItem.Checked = true;
-            richTextBox1.WordWrap = true;
+            notebox.WordWrap = true;
             строкаСостоянияToolStripMenuItem.Checked = true;
-            отменитьToolStripMenuItem.Enabled = false;
-            вставитьToolStripMenuItem.Enabled = false;
-            копироватьToolStripMenuItem.Enabled = false;
-            удалитьToolStripMenuItem.Enabled = false;
-            найтиToolStripMenuItem.Enabled = false;
-            найтиДалееToolStripMenuItem.Enabled = false;
-            найтиРанееToolStripMenuItem.Enabled = false;
-            вырезатьToolStripMenuItem.Enabled = false;
 
-            richTextBox1.Dock = DockStyle.Fill;
+            notebox.Dock = DockStyle.Fill;
             openFileDialog1.FileName = "Text2.txt";
             openFileDialog1.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
             saveFileDialog1.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
 
-            richTextBox1.ZoomFactor = 1;
+            notebox.ZoomFactor = 1;
 
             statusStrip1.Visible = true;
             statusStrip1.Items[1].Text = DateTime.Now.ToLongDateString() + "     |     ";
             statusStrip1.Items[0].Text = " символов     |     ";
             statusStrip1.Items[2].Text = "Масштаб 100%";
 
-            richTextBox1.Font = new Font("Thimes New Roman", 14.0F);
+            notebox.Font = new Font("Thimes New Roman", 14.0F);
 
         }
 
         private void переносПоСловамToolStripMenuItem_Click(object sender, EventArgs e)
         {
             переносПоСловамToolStripMenuItem.Checked = !переносПоСловамToolStripMenuItem.Checked;
-            richTextBox1.WordWrap = !richTextBox1.WordWrap;
+            notebox.WordWrap = !notebox.WordWrap;
         }
 
         private void строкаСостоянияToolStripMenuItem_Click(object sender, EventArgs e)
@@ -58,7 +50,7 @@ namespace bl2
         private void шрифтToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fontDialog1.ShowDialog();
-            richTextBox1.Font = fontDialog1.Font;
+            notebox.Font = fontDialog1.Font;
         }
 
         private void выходToolStripMenuItem_Click(object sender, EventArgs e)
@@ -72,9 +64,9 @@ namespace bl2
             {
                 var Писатель = new System.IO.StreamWriter(saveFileDialog1.FileName, false,
                 System.Text.Encoding.GetEncoding(1251));
-                Писатель.Write(richTextBox1.Text);
+                Писатель.Write(notebox.Text);
                 Писатель.Close();
-                richTextBox1.Modified = false;
+                notebox.Modified = false;
             }
             catch (System.Exception Ситуация)
             { 
@@ -85,7 +77,7 @@ namespace bl2
 
         public void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (richTextBox1.Modified == false) return;
+            if (notebox.Modified == false) return;
             DialogResult MBox = MessageBox.Show("Текст был изменен.\nСохранить изменения?",
             "Простой редактор", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
             if (MBox == DialogResult.No) return;
@@ -109,7 +101,7 @@ namespace bl2
             { 
                 var Читатель = new System.IO.StreamReader(openFileDialog1.FileName,
                 System.Text.Encoding.GetEncoding(1251));
-                richTextBox1.Text = Читатель.ReadToEnd();
+                notebox.Text = Читатель.ReadToEnd();
                 Читатель.Close();
             }
             catch (System.IO.FileNotFoundException Ситуация)
@@ -134,14 +126,14 @@ namespace bl2
         {
             try
             {
-                richTextBox1.ZoomFactor += 1;
+                notebox.ZoomFactor += 1;
             }
             catch (System.Exception Ситуация)
             {
                 MessageBox.Show(Ситуация.Message, "Ошибка", MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation);
             }
-            int mas = Convert.ToInt32(richTextBox1.ZoomFactor);
+            int mas = Convert.ToInt32(notebox.ZoomFactor);
             statusStrip1.Items[2].Text = "Масштаб " + (mas * 100) + "%";
         }
 
@@ -155,72 +147,34 @@ namespace bl2
         {
             try
             {
-                richTextBox1.ZoomFactor -= 1;
+                notebox.ZoomFactor -= 1;
             }
             catch (System.Exception Ситуация)
             {
                 MessageBox.Show(Ситуация.Message, "Ошибка", MessageBoxButtons.OK,
                 MessageBoxIcon.Exclamation);
             }
-            int mas = Convert.ToInt32(richTextBox1.ZoomFactor);
+            int mas = Convert.ToInt32(notebox.ZoomFactor);
             statusStrip1.Items[2].Text = "Масштаб " + (mas * 100) + "%";
         }
 
         private void восстановитьМасштабПоУмолчаниюToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            richTextBox1.ZoomFactor = 1;
-            int mas = Convert.ToInt32(richTextBox1.ZoomFactor);
+            notebox.ZoomFactor = 1;
+            int mas = Convert.ToInt32(notebox.ZoomFactor);
             statusStrip1.Items[2].Text = "Масштаб " + (mas * 100) + "%";
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            int mas = Convert.ToInt32(richTextBox1.ZoomFactor);
-            int pos = richTextBox1.SelectionStart; // get starting point
-            int line = richTextBox1.GetLineFromCharIndex(pos); // get line number
-            int column = richTextBox1.SelectionStart - richTextBox1.GetFirstCharIndexFromLine(line); // get column number
+            int mas = Convert.ToInt32(notebox.ZoomFactor);
+            int pos = notebox.SelectionStart; // get starting point
+            int line = notebox.GetLineFromCharIndex(pos); // get line number
+            int column = notebox.SelectionStart - notebox.GetFirstCharIndexFromLine(line); // get column number
             statusStrip1.Items[0].Text = "Стр. " + (line + 1) + ", Столб." + (column + 1) + "     |     ";
             statusStrip1.Items[2].Text = "Масштаб " + (mas * 100) +"%";
-
-            if (richTextBox1.TextLength != 0)
-            {
-                отменитьToolStripMenuItem.Enabled = true;
-                вставитьToolStripMenuItem.Enabled = true;
-                копироватьToolStripMenuItem.Enabled = true;
-                удалитьToolStripMenuItem.Enabled = true;
-                найтиToolStripMenuItem.Enabled = true;
-                найтиДалееToolStripMenuItem.Enabled = true;
-                найтиРанееToolStripMenuItem.Enabled = true;
-                вырезатьToolStripMenuItem.Enabled = true;
-            }
-            else
-            {
-                отменитьToolStripMenuItem.Enabled = false;
-                вставитьToolStripMenuItem.Enabled = false;
-                копироватьToolStripMenuItem.Enabled = false;
-                удалитьToolStripMenuItem.Enabled = false;
-                найтиToolStripMenuItem.Enabled = false;
-                найтиДалееToolStripMenuItem.Enabled = false;
-                найтиРанееToolStripMenuItem.Enabled = false;
-                вырезатьToolStripMenuItem.Enabled = false;
-            }
         }
 
-        public void CpyText()
-        {
-            Clipboard.SetText(richTextBox1.SelectedText);
-        }
-
-        public void CutText()
-        {
-            Clipboard.SetText(richTextBox1.Text.Substring(richTextBox1.SelectionStart, richTextBox1.SelectionLength));
-            richTextBox1.Text = richTextBox1.Text.Remove(richTextBox1.SelectionStart, richTextBox1.SelectionLength);
-        }
-
-        public void pasteText()
-        {
-            richTextBox1.Text = richTextBox1.Text.Substring(0, richTextBox1.SelectionStart) + Clipboard.GetText() + richTextBox1.Text.Substring(richTextBox1.SelectionStart, richTextBox1.Text.Length - richTextBox1.SelectionStart);
-        }
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -229,17 +183,17 @@ namespace bl2
         }
         private void копироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CpyText();
+            notebox.Copy();
         }
 
         private void вырезатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CutText();
+            notebox.Cut();
         }
 
         private void вставитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            pasteText();
+            notebox.Paste();
         }
 
         public void Unsave()
@@ -251,24 +205,44 @@ namespace bl2
             }
             if (result == DialogResult.No)
             {
-                richTextBox1.Text = "";
+                notebox.Text = "";
             }
         }
 
 
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (richTextBox1.TextLength != 0) Unsave();
+            if (notebox.TextLength != 0) Unsave();
             else
             {
-                richTextBox1.Text = "";
+                notebox.Text = "";
             }
         }
 
         private void найтиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form3 fm = new Form3();
-            fm.ShowDialog();
+            Form3 findText = new Form3();
+            findText.Owner = this;
+            findText.Show();
+        }
+
+        private void отменитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notebox.Undo();
+        }
+
+        private void перейтиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form4 gotoform = new Form4();
+            gotoform.Owner = this;
+            gotoform.numericUpDown1.Minimum = 0;
+            gotoform.numericUpDown1.Maximum = notebox.Lines.Count();
+            gotoform.ShowDialog();
+        }
+
+        private void выделитьВсёToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notebox.SelectAll();
         }
     }
 }
